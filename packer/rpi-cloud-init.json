@@ -1,0 +1,23 @@
+{
+  "builders": [
+    {
+      "type": "arm-image",
+      "image_type": "raspberrypi",
+      "iso_url": "http://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2020-05-28/2020-05-27-raspios-buster-lite-armhf.zip",
+      "iso_checksum_type": "sha256",
+      "iso_checksum": "f5786604be4b41e292c5b3c711e2efa64b25a5b51869ea8313d58da0b46afc64"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "apt-get update",
+        "apt-get install cloud-init -y",
+        "sed -i '1 s|$| ds=nocloud;s=file:///boot/|' /boot/cmdline.txt",
+        "touch /boot/meta-data",
+        "touch /boot/user-data"
+      ]
+    }
+  ]
+}
