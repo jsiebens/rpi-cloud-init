@@ -1,4 +1,7 @@
 {
+  "variables": {
+    "preferred_mirror": "{{env `PREFERRED_MIRROR`}}"
+  },
   "builders": [
     {
       "type": "arm-image",
@@ -11,12 +14,13 @@
   "provisioners": [
     {
       "type": "shell",
-      "inline": [
-        "apt-get update",
-        "apt-get install cloud-init -y",
-        "sed -i '1 s|$| ds=nocloud;s=file:///boot/|' /boot/cmdline.txt",
-        "touch /boot/meta-data",
-        "touch /boot/user-data"
+      "environment_vars": [
+        "PREFERRED_MIRROR={{user `preferred_mirror`}}"
+      ],
+      "scripts": [
+        "scripts/before-installation.sh",
+        "scripts/install-cloud-init.sh",
+        "scripts/after-installation.sh"
       ]
     }
   ]
