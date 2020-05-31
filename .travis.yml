@@ -7,7 +7,7 @@ script:
 - sudo make dist
 
 before_deploy:
-  - cd dist && ../ci/hashgen.sh
+  - cd dist && sudo ../ci/hashgen.sh
 
 deploy:
   provider: releases
