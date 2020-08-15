@@ -3,8 +3,6 @@ set -e
 
 apt-get install cloud-init -y
 
-sed -i '1 s|$| ds=nocloud;s=file:///boot/|' /boot/cmdline.txt
-
 touch /boot/meta-data
 touch /boot/user-data
 
@@ -23,6 +21,14 @@ deb {{mirror}} {{codename}} main contrib non-free rpi
 deb-src {{mirror}} {{codename}} main contrib non-free rpi
 EOF
 
+cat -> /etc/cloud/cloud.cfg.d/99_fake_cloud.cfg <<'EOF'
+# configure cloud-init for NoCloud
+datasource_list: [ NoCloud, None ]
+datasource:
+  NoCloud:
+    fs_label: boot
+EOF
+
 cat - > /etc/cloud/cloud.cfg.d/99_raspbian.cfg <<'EOF'
 system_info:
   default_user:
@@ -32,9 +38,14 @@ system_info:
     groups: [pi adm dialout cdrom sudo audio video plugdev games users input netdev spi i2c gpio]
     sudo: ["ALL=(ALL) NOPASSWD: ALL"]
     shell: /bin/bash
+  network:
+    renderers: ['eni']    
   package_mirrors:
     - arches: [default]
       failsafe:
         primary: http://raspbian.raspberrypi.org/raspbian
         security: http://raspbian.raspberrypi.org/raspbian
 EOF
+
+systemctl disable dhcpcd
+systemctl enable networking
