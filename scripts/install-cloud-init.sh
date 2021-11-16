@@ -38,3 +38,6 @@ system_info:
         primary: http://raspbian.raspberrypi.org/raspbian
         security: http://raspbian.raspberrypi.org/raspbian
 EOF
+
+# Disable dhcpcd - it has a conflict with cloud-init network config
+systemctl mask dhcpcd

@@ -1,0 +1,49 @@
+name: build
+
+on:
+  push:
+    branches: [ '*' ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "⬇ Checkout"
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 1
+
+      - name: "🏗 Run Packer"
+        run: |
+          mkdir output-arm-image
+          docker run \
+            --rm \
+            --privileged \
+            -v /dev:/dev \
+            -v ${PWD}/:/build:ro \
+            -v ${PWD}/output-arm-image:/build/output-arm-image \
+            ghcr.io/solo-io/packer-plugin-arm-image build "/build/packer/rpi-cloud-init.json"
+
+      - name: "✏ Rename image"
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          cd output-arm-image
+          mv image rpi-packer.img
+
+      - name: "📦 Package the image"
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: package-image
+        uses: OctoPrint/actions/package-rpi-image@main
+        with:
+          image_path: "output-arm-image/rpi-packer.img"
+
+      - name: "🔖 Create release & attach assets"
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            output-arm-image/*.zip*
