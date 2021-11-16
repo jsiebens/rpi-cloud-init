@@ -28,14 +28,14 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           cd output-arm-image
-          mv image rpi-packer.img
+          mv image rpi-cloud-init.img
 
       - name: "📦 Package the image"
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: package-image
         uses: OctoPrint/actions/package-rpi-image@main
         with:
-          image_path: "output-arm-image/rpi-packer.img"
+          image_path: "output-arm-image/rpi-cloud-init.img"
 
       - name: "🔖 Create release & attach assets"
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
