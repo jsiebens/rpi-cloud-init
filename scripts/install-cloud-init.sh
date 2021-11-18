@@ -3,8 +3,6 @@ set -e
 
 apt-get install cloud-init -y
 
-sed -i '1 s|$| ds=nocloud;s=file:///boot/|' /boot/cmdline.txt
-
 touch /boot/meta-data
 touch /boot/user-data
 
@@ -21,6 +19,14 @@ cat - > /etc/cloud/templates/sources.list.debian.tmpl <<'EOF'
 
 deb {{mirror}} {{codename}} main contrib non-free rpi
 deb-src {{mirror}} {{codename}} main contrib non-free rpi
+EOF
+
+cat -> /etc/cloud/cloud.cfg.d/99_fake_cloud.cfg <<'EOF'
+# configure cloud-init for NoCloud
+datasource_list: [ NoCloud, None ]
+datasource:
+  NoCloud:
+    fs_label: boot
 EOF
 
 cat - > /etc/cloud/cloud.cfg.d/99_raspbian.cfg <<'EOF'
