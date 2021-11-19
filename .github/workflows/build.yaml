@@ -13,29 +13,26 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: "⬇ Install Packer"
+        uses: hashicorp-contrib/setup-packer@v1
+
       - name: "🏗 Run Packer"
         run: |
-          mkdir output-arm-image
-          docker run \
-            --rm \
-            --privileged \
-            -v /dev:/dev \
-            -v ${PWD}/:/build:ro \
-            -v ${PWD}/output-arm-image:/build/output-arm-image \
-            ghcr.io/solo-io/packer-plugin-arm-image build "/build/packer/rpi-cloud-init.json"
+          mkdir images
+          sudo packer init packer/
+          sudo packer build -parallel-builds=1 packer/
 
-      - name: "✏ Rename image"
+      - name: "📦 Package the buster image"
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          cd output-arm-image
-          mv image rpi-cloud-init.img
-
-      - name: "📦 Package the image"
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        id: package-image
         uses: OctoPrint/actions/package-rpi-image@main
         with:
-          image_path: "output-arm-image/rpi-cloud-init.img"
+          image_path: "images/rpi-cloud-init-raspios-buster-armhf.img"
+
+      - name: "📦 Package the bullseye image"
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: OctoPrint/actions/package-rpi-image@main
+        with:
+          image_path: "images/rpi-cloud-init-raspios-bullseye-armhf.img"
 
       - name: "🔖 Create release & attach assets"
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -46,4 +43,4 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            output-arm-image/*.zip*
+            images/*.zip*          

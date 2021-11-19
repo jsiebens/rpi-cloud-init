@@ -1,4 +1,4 @@
-name: build
+name: release
 
 on:
   release:
@@ -13,30 +13,28 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: "⬇ Install Packer"
+        uses: hashicorp-contrib/setup-packer@v1
+
       - name: "🏗 Run Packer"
         run: |
-          mkdir output-arm-image
-          docker run \
-            --rm \
-            --privileged \
-            -v /dev:/dev \
-            -v ${PWD}/:/build:ro \
-            -v ${PWD}/output-arm-image:/build/output-arm-image \
-            ghcr.io/solo-io/packer-plugin-arm-image build "/build/packer/rpi-cloud-init.json"
+          mkdir images
+          sudo packer init packer/
+          sudo packer build -parallel-builds=1 packer/
 
-      - name: "✏ Rename image"
-        run: |
-          cd output-arm-image
-          mv image rpi-cloud-init.img
-
-      - name: "📦 Package the image"
+      - name: "📦 Package the buster image"
         uses: OctoPrint/actions/package-rpi-image@main
         with:
-          image_path: "output-arm-image/rpi-cloud-init.img"
+          image_path: "images/rpi-cloud-init-raspios-buster-armhf.img"
+
+      - name: "📦 Package the bullseye image"
+        uses: OctoPrint/actions/package-rpi-image@main
+        with:
+          image_path: "images/rpi-cloud-init-raspios-bullseye-armhf.img"
 
       - name: "🔖 Attach assets"
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: "./output-arm-image/*.zip*"
+          args: "./images/*.zip*"     

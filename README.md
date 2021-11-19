@@ -19,3 +19,28 @@ This setup includes the following image:
 3. Customize the /boot/user-data with e.g. hostname, authorized ssh keys, ...
 
 4. Insert the SD card into the Raspberry Pi and power it up.
+
+## Building the images
+
+This project includes a Vagrant file and some scripts to build the images in an isolated environment.
+
+To use the Vagrant environment, start by cloning this repository:
+
+```
+git clone https://github.com/jsiebens/rpi-cloud-init
+cd rpi-cloud-init
+```
+
+Next, start the Vagrant box and ssh into it:
+
+```
+vagrant up
+vagrant ssh
+```
+
+When connected with the Vagrant box, run `build.sh` in the `/vagrant` directory:
+
+```
+cd /vagrant
+./build.sh
+```
