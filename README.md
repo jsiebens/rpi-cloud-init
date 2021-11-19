@@ -1,6 +1,6 @@
 # cloud-init on a Raspberry Pi
 
-[![Build Status](https://travis-ci.org/jsiebens/rpi-cloud-init.svg?branch=master)](https://travis-ci.org/jsiebens/rpi-cloud-init)
+![main](https://github.com/jsiebens/rpi-cloud-init/actions/workflows/build.yaml/badge.svg?branch=main)
 
 This repository contains Packer templates and scripts to build a Raspbian / Raspberry Pi OS image with [cloud-init](https://cloud-init.io/) pre-installed.
 
