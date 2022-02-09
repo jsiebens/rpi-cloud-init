@@ -1,8 +1,9 @@
 
 build {
   sources = [
-    "source.arm-image.raspios_buster",
-    "source.arm-image.raspios_bullseye"
+    "source.arm-image.raspios_buster_armhf",
+    "source.arm-image.raspios_bullseye_armhf",
+    "source.arm-image.raspios_bullseye_arm64"
   ]
 
   provisioner "shell" {

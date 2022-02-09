@@ -22,15 +22,20 @@ jobs:
           sudo packer init packer/
           sudo packer build -parallel-builds=1 packer/
 
-      - name: "📦 Package the buster image"
+      - name: "📦 Package the buster armhf image"
         uses: OctoPrint/actions/package-rpi-image@main
         with:
           image_path: "images/rpi-cloud-init-raspios-buster-armhf.img"
 
-      - name: "📦 Package the bullseye image"
+      - name: "📦 Package the bullseye armhf image"
         uses: OctoPrint/actions/package-rpi-image@main
         with:
           image_path: "images/rpi-cloud-init-raspios-bullseye-armhf.img"
+
+      - name: "📦 Package the bullseye arm64 image"
+        uses: OctoPrint/actions/package-rpi-image@main
+        with:
+          image_path: "images/rpi-cloud-init-raspios-bullseye-arm64.img"
 
       - name: "🔖 Attach assets"
         uses: skx/github-action-publish-binaries@master
