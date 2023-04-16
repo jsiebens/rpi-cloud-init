@@ -22,12 +22,6 @@ jobs:
           sudo packer init packer/
           sudo packer build -parallel-builds=1 packer/
 
-      - name: "📦 Package the buster armhf image"
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: OctoPrint/actions/package-rpi-image@main
-        with:
-          image_path: "images/rpi-cloud-init-raspios-buster-armhf.img"
-
       - name: "📦 Package the bullseye armhf image"
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: OctoPrint/actions/package-rpi-image@main
