@@ -1,7 +1,6 @@
 
 build {
   sources = [
-    "source.arm-image.raspios_buster_armhf",
     "source.arm-image.raspios_bullseye_armhf",
     "source.arm-image.raspios_bullseye_arm64"
   ]

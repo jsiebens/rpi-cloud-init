@@ -1,10 +1,3 @@
-source "arm-image" "raspios_buster_armhf" {
-  image_type      = "raspberrypi"
-  iso_url         = "http://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2021-05-28/2021-05-07-raspios-buster-armhf-lite.zip"
-  iso_checksum    = "sha256:c5dad159a2775c687e9281b1a0e586f7471690ae28f2f2282c90e7d59f64273c"
-  output_filename = "images/rpi-cloud-init-raspios-buster-armhf.img"
-}
-
 source "arm-image" "raspios_bullseye_armhf" {
   image_type      = "raspberrypi"
   iso_url         = "http://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2022-01-28/2022-01-28-raspios-bullseye-armhf-lite.zip"
