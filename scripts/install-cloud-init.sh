@@ -26,7 +26,7 @@ cat -> /etc/cloud/cloud.cfg.d/99_fake_cloud.cfg <<'EOF'
 datasource_list: [ NoCloud, None ]
 datasource:
   NoCloud:
-    fs_label: boot
+    fs_label: bootfs
 EOF
 
 cat - > /etc/cloud/cloud.cfg.d/99_raspbian.cfg <<'EOF'
